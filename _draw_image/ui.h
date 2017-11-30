@@ -34,5 +34,6 @@ _UI_EXTERN void uiPixmapImageGetData(uiPixmapImage *, uiImageData *);
 _UI_EXTERN void uiImageLoadPixmap32Raw(uiPixmapImage *img, int x, int y, int width, int height, int rowstrideBytes, uiPixmap32Format fmt, void *data);
 
 _UI_EXTERN void uiDrawPixmapImage(uiDrawContext *c, double x, double y, uiPixmapImage *img);
+_UI_EXTERN void uiScalePixmapImage(uiDrawContext *c, double xScale, double yScale);
 
 #endif
