@@ -1,0 +1,11 @@
+# 8 Feb 2018
+
+list(APPEND _LIBUI_SOURCES
+	_draw_image/unix/drawimage.c
+)
+set(_LIBUI_SOURCES ${_LIBUI_SOURCES} PARENT_SCOPE)
+
+list(APPEND _LIBUI_INCLUDEDIRS
+	_draw_image/unix
+)
+set(_LIBUI_INCLUDEDIRS ${_LIBUI_INCLUDEDIRS} PARENT_SCOPE)

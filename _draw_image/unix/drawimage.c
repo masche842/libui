@@ -1,9 +1,9 @@
 #include "uipriv_unix.h"
-#include "draw.h"
+#include "../../unix/draw.h"
 
-#include <machine/endian.h>
+#include <endian.h>
 
-struct uiImage {
+struct uiPixmapImage {
 	cairo_surface_t *s;
 };
 
@@ -14,7 +14,7 @@ struct uiImage {
  * Also hasn't been tested on a big endian machine, other than that the
  * generated assembler looks right. What could possibly go wrong?
  */
-const static union {
+static const union {
         uint32_t a;
         struct {
                 char little;
@@ -26,20 +26,20 @@ const static union {
         .a = 1
 };
 
-uiImage *uiNewImage(int width, int height)
+uiPixmapImage *uiNewPixmapImage(int width, int height)
 {
-	uiImage *img = uiNew(uiImage);
+	uiPixmapImage *img = uiNew(uiPixmapImage);
 	img->s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 	return img;
 }
 
-void uiFreeImage(uiImage *img)
+void uiFreePixmapImage(uiPixmapImage *img)
 {
 	cairo_surface_destroy(img->s);
 	uiFree(img);
 }
 
-void uiImageGetData(uiImage *img, uiImageData *id)
+void uiPixmapImageGetData(uiPixmapImage *img, uiImageData *id)
 {
 	id->fmt = uiPixmap32FormatHasAlpha | uiPixmap32FormatAlphaPremultiplied;
 	if (endian.is.little) {
@@ -64,7 +64,7 @@ void uiImageGetData(uiImage *img, uiImageData *id)
  * manipulating width, height and offset into the data so there's no
  * need to support that.
  */
-void uiImageLoadPixmap32Raw(uiImage *img, int x, int y, int width, int height, int rowstrideBytes, uiPixmap32Format fmt, void *data)
+void uiImageLoadPixmap32Raw(uiPixmapImage *img, int x, int y, int width, int height, int rowstrideBytes, uiPixmap32Format fmt, void *data)
 {
 	int sw;
 	int sh;
@@ -75,7 +75,7 @@ void uiImageLoadPixmap32Raw(uiImage *img, int x, int y, int width, int height, i
 	uint32_t *dst;
 	uiImageData dstd;
 
-	uiImageGetData(img, &dstd);
+	uiPixmapImageGetData(img, &dstd);
 	drs = dstd.rowstride / 4;
 	dst = (uint32_t *)dstd.data;	// assumes good alignment.
 	dw = dstd.width;
@@ -92,9 +92,13 @@ void uiImageLoadPixmap32Raw(uiImage *img, int x, int y, int width, int height, i
 	cairo_surface_mark_dirty(img->s);
 }
 
+void uiScalePixmapImage(uiDrawContext *c, double xScale, double yScale) {
+	/* not yet implemented */
+}
+
 // TODO Since we're doing allocations now, we probably want a function to extract the byte array and its parameters.
 
-void uiDrawImage(uiDrawContext *c, double x, double y, uiImage *img)
+void uiDrawPixmapImage(uiDrawContext *c, double x, double y, uiPixmapImage *img)
 {
 	cairo_surface_mark_dirty(img->s);		// This is the best place for this, I guess.
 	cairo_set_source_surface(c->cr, img->s, x, y);

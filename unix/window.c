@@ -229,6 +229,11 @@ void uiWindowSetMargined(uiWindow *w, int margined)
 	setMargined(w->childHolderContainer, w->margined);
 }
 
+void uiWindowSetAutosave(uiWindow *w, const char *name)
+{
+	/* not yet implemented */
+}
+
 uiWindow *uiNewWindow(const char *title, int width, int height, int hasMenubar)
 {
 	uiWindow *w;
