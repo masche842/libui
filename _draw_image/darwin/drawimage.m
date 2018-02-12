@@ -65,11 +65,13 @@ void uiImageLoadPixmap32Raw(uiPixmapImage *img, int x, int y, int width, int hei
 // from draw.m
 void uiDrawPixmapImage(uiDrawContext *c, double x, double y, uiPixmapImage *img)
 {
-       CGContextDrawImage(c->c, CGRectMake(x, y, img->w, img->h), CGBitmapContextCreateImage(img->c));
+	CGImageRef imgRef = CGBitmapContextCreateImage(img->c);
+	CGContextDrawImage(c->c, CGRectMake(x, y, img->w, img->h), imgRef);
+	CFRelease(imgRef);
 }
 
 // retina display patches
 void uiScalePixmapImage(uiDrawContext *c, double xScale, double yScale)
 {
-       CGContextScaleCTM(c->c, xScale, yScale);
+	CGContextScaleCTM(c->c, xScale, yScale);
 }
