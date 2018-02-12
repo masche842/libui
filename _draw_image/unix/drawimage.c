@@ -100,6 +100,8 @@ void uiScalePixmapImage(uiDrawContext *c, double xScale, double yScale) {
 
 void uiDrawPixmapImage(uiDrawContext *c, double x, double y, uiPixmapImage *img)
 {
+	cairo_translate(c->cr, 0, cairo_image_surface_get_height(img->s));
+	cairo_scale(c->cr, 1, -1);
 	cairo_surface_mark_dirty(img->s);		// This is the best place for this, I guess.
 	cairo_set_source_surface(c->cr, img->s, x, y);
 	cairo_paint(c->cr);
