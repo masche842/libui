@@ -1,5 +1,5 @@
 #import "ui.h"
-#import "uipriv_darwin.h"
+#import "./uipriv_darwin.h"
 
 
 // drawimage.m
